@@ -7,7 +7,11 @@ const ShiftSchema = new mongoose.Schema(
         email: String,
         startDate: Date,
         startTime: String,
-        endTime: String
+        endTime: String,
+        completed: {
+            type: Boolean,
+            default: false
+        }
     },
     {timestamps: true}
 );
