@@ -93,3 +93,25 @@ module.exports.updateShift = async (req, res) => {
     updatedShift,
   });
 };
+// Xóa tài khoản nhân viên
+module.exports.deleteEmployee = async(req,res) =>{
+  const { id } = req.params;
+  if (!id) {
+    return res.json({
+      code: 400,
+      message: "thiếu id nhân viên",
+    })
+  }
+  const deleteEmployee = await User.findByIdAndDelete(id);
+  if (!deleteEmployee)
+  {
+    return res.json({
+      code: 400,
+      message: "Không tìm thấy tài khoản nhân viên"
+    })
+  }
+  res.json({
+    code: 200,
+    message: "Xóa thành công"
+  })
+}
