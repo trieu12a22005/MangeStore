@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken"); // thư viện để tạo token
 const bcrypt = require("bcrypt"); // ✅ Import bcrypt đúng cách
 const generateHelper = require("../../../helpers/generate");
 const ForgotPassword = require("../models/forgot-pasword.model");
+const shiftEmployee = require("../models/shiftEmployee.model")
 const sendMailHelper = require("../../../helpers/sendMail");
 module.exports.register = async (req, res) => {
   req.body.password = md5(req.body.password);
@@ -18,8 +19,10 @@ module.exports.register = async (req, res) => {
     });
   } else {
     const user = new User({
-      fullName: req.body.fullname,
+      fullName: req.body.fullName,
       email: req.body.email,
+      birth: req.body.birth,
+      role: req.body.role,
       password: req.body.password,
       
     });
@@ -179,10 +182,15 @@ module.exports.detailUser = async(req,res) =>{
     _id: req.user.userId,
     deleted: false
   })
-  console.log(user)
-  res.json({
-    code: 200
-  })
+  console.log(user);
+  res.json(
+    {
+      fullName: user.fullName,
+      email: user.email,
+      birth: user.birth,
+      role: user.role
+  }
+  )
 }
 module.exports.logout = async(req,res) =>{
   res.cookie("token", "", {

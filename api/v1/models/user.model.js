@@ -6,11 +6,10 @@ const userSchema = new mongoose.Schema(
         },
         email: String,
         password: String,
-        token:{
-            type: String,
-        },
+        birth: String,
         role: {
-            type: String
+            type: String,
+            default: "employee"
         },
         deleted: {
             type: Boolean,
