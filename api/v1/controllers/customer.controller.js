@@ -1,11 +1,14 @@
 const customer = require("../models/customer.model");
-module.exports.postReversation = async(req,res) =>{
+const tableModel = require("../models/table.model");
+
+module.exports.postReversation = async (req, res) => {
     try {
         const { customerName, phoneNumber, numberOfGuests, reservationDate, reservationTime, tableNumber } = req.body;
 
-        // Kiểm tra dữ liệu đầu vào
-        if (!customerName || !phoneNumber || !numberOfGuests || !reservationDate || !reservationTime) {
-            return res.status(400).json({ message: "Missing required fields" });
+        // Kiểm tra bàn có sẵn không
+        const Table = await tableModel.findOne({ tableNumber, available: true });
+        if (!Table) {
+            return res.status(400).json({ message: "Bàn đã được đặt hoặc không tồn tại" });
         }
 
         // Kiểm tra số khách hợp lệ
@@ -18,18 +21,13 @@ module.exports.postReversation = async(req,res) =>{
         if (isNaN(date.getTime())) {
             return res.status(400).json({ message: "Invalid reservation date" });
         }
-        const table = await customer.find(
-            {
-                tableNumber: tableNumber
-            }
-        )
-        if (tableNumber)
-        {
-            return res.json({
-                code: 400,
-                message: "Bàn đã được đặt"
-            })
+
+        // Kiểm tra nếu bàn đã được đặt
+        const existingReservation = await customer.findOne({ table: Table._id });
+        if (existingReservation) {
+            return res.status(400).json({ message: "Bàn đã được đặt" });
         }
+
         // Tạo đặt bàn mới
         const newReservation = new customer({
             customerName,
@@ -37,20 +35,26 @@ module.exports.postReversation = async(req,res) =>{
             numberOfGuests,
             reservationDate: date,
             reservationTime,
-            tableNumber,
+            table: Table._id,
         });
 
         // Lưu vào database
-        const savedReservation = await newReservation.save();
-        res.status(201).json({ message: "Reservation successful", reservation: savedReservation });
+        await newReservation.save();
+
+        // Cập nhật trạng thái bàn thành "đã được đặt"
+        Table.available = false;
+        await Table.save();
+
+        res.status(201).json({ message: "Reservation successful", reservation: newReservation });
 
     } catch (error) {
         console.error("❌ Error making reservation:", error);
         res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-}
+};
+
 module.exports.getReversation = async (req,res) =>{
-    const reversation =  await customer.find();
+    const reversation = await customer.find().populate("table", "tableNumber");
     res.json(reversation)
 }
 module.exports.updateTable = async(req,res) =>{
