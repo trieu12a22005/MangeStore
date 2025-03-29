@@ -23,5 +23,37 @@ namespace ManageStore.View
         {
             InitializeComponent();
         }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
+        }
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            // Check if the username and password are correct
+            //if (txtUsername.Text == "admin" && txtPassword.Password == "admin")
+            //{
+            //    // Open the main window
+            //    MainWindow mainWindow = new MainWindow();
+            //    mainWindow.Show();
+            //    // Close the login window
+            //    this.Close();
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Username or password is incorrect!");
+            //}
+        }
     }
 }
