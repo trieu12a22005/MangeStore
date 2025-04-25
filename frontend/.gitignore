@@ -1,0 +1,18 @@
+# Visual Studio temporary files
+.vs/
+*.suo
+*.user
+ManageStore.csproj.user
+
+# Build results
+/bin/
+/obj/
+*.exe
+*.dll
+
+# NuGet packages
+packages/
+
+# Other temporary files
+*.cache
+*.log
