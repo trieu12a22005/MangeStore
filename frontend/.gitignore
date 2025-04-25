@@ -1,18 +1,47 @@
-# Visual Studio temporary files
+# Visual Studio-specific folders
 .vs/
-*.suo
 *.user
-ManageStore.csproj.user
+*.suo
+*.userosscache
+*.sln.docstates
 
 # Build results
-/bin/
-/obj/
+[Bb]in/
+[Oo]bj/
 *.exe
 *.dll
+*.pdb
+
+# Test results
+[Tt]est[Rr]esult*/  
+*.trx
+*.coverage
 
 # NuGet packages
 packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
 
-# Other temporary files
-*.cache
+# Rider IDE
+.idea/
+
+# Temporary & cache files
 *.log
+*.cache
+*.tmp
+*.dbmdl
+*.bak
+
+# Others
+_ReSharper*/
+*.VSCodeCounter
+*.vspscc
+*.vssscc
+*.orig
+*.db
+*.DS_Store
+Thumbs.db
