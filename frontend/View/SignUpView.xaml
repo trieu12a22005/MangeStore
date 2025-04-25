@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="Transparent"
-        AllowDrop="True"
+        AllowsTransparency="True"
         MouseDown="Window_MouseDown">
     <Grid>
         <Grid.ColumnDefinitions>
