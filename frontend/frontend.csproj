@@ -9,10 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\account.png" />
+    <None Remove="Images\calendar-white.png" />
+    <None Remove="Images\check-white.png" />
     <None Remove="Images\lock-icon.png" />
     <None Remove="Images\mail-icon.png" />
     <None Remove="Images\menu-icon.png" />
+    <None Remove="Images\menu-white.png" />
     <None Remove="Images\user-icon.png" />
+    <None Remove="Images\user-line.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,10 +26,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\account.png" />
+    <Resource Include="Images\avatar-white.png" />
+    <Resource Include="Images\calendar-white.png" />
+    <Resource Include="Images\check-white.png" />
     <Resource Include="Images\lock-icon.png" />
     <Resource Include="Images\mail-icon.png" />
     <Resource Include="Images\menu-icon.png" />
+    <Resource Include="Images\menu-white.png" />
     <Resource Include="Images\user-icon.png" />
+    <Resource Include="Images\user-line.png" />
   </ItemGroup>
 
 </Project>

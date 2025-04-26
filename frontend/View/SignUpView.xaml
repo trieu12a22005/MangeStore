@@ -154,7 +154,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <Image Source="/Images/user-icon.png" Height="20"/>
+                                <Image Source="/Images/user-line.png" Height="20"/>
                                 <TextBlock x:Name="textName"                                                                                    
                                            MouseDown="textName_MouseDown"
                                            Text="Name"
