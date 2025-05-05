@@ -4,16 +4,16 @@ module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Thiếu hoặc sai định dạng token!" });
+    return res.status(401).json({ message: "Token không hợp lệ hoặc thiếu!" });
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    req.user = decoded; // Gán userId cho các controller dùng
+    req.user = decoded; // Chứa userId
     next();
-  } catch (err) {
-    return res.status(401).json({ message: "Token không hợp lệ hoặc đã hết hạn!" });
+  } catch (error) {
+    return res.status(401).json({ message: "Token hết hạn hoặc không hợp lệ!" });
   }
 };
