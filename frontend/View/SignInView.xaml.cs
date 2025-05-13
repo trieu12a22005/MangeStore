@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using frontend.ViewModel;
 
 namespace frontend.View
 {
@@ -22,6 +23,7 @@ namespace frontend.View
         public SignInView()
         {
             InitializeComponent();
+            DataContext = new SignInViewModel();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -56,6 +58,10 @@ namespace frontend.View
             {
                 textEmail.Visibility = Visibility.Visible;
             }
+            if (DataContext is SignInViewModel viewModel)
+            {
+                viewModel.Email = txtEmail.Text;
+            }
         }
 
         private void textPassword_MouseDown(object sender, MouseButtonEventArgs e)
@@ -73,11 +79,18 @@ namespace frontend.View
             {
                 textPassword.Visibility = Visibility.Visible;
             }
+            if (DataContext is SignInViewModel viewModel)
+            {
+                viewModel.Password = txtPassword.Password;
+            }
         }
 
-        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        private void forgotPassword_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            if (DataContext is SignInViewModel viewModel && viewModel.ForgotPasswordCommand != null)
+            {
+                viewModel.ForgotPasswordCommand.Execute(this);
+            }
         }
 
         private void btnSignIn_Click(object sender, RoutedEventArgs e)
@@ -88,6 +101,6 @@ namespace frontend.View
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
 
-        }
+        }        
     }
 }
