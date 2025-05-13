@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="QuanLyQuanAn.View.Statistics.History"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:QuanLyQuanAn.View.Statistics"
+             xmlns:vm="clr-namespace:QuanLyQuanAn.ViewModel.StatisticVM"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <vm:WidthOfDatePickerAcrossGrid x:Key="Convert" />
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <vm:HistoryVM />
+    </UserControl.DataContext>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                 From="0.0"
+                                 To="1.0"
+                                 Duration="0:0:0.5" />
+                </Storyboard>
+            </BeginStoryboard>
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="UserControlTranslateTransform"
+                                 Storyboard.TargetProperty="Y"
+                                 From="30"
+                                 To="0"
+                                 Duration="0:0:0.5">
+
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <UserControl.RenderTransform>
+        <TranslateTransform x:Name="UserControlTranslateTransform"
+                        X="0"
+                        Y="30" />
+    </UserControl.RenderTransform>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0"
+                  x:Name="GridDatePicker">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontStyle="Normal"
+                           FontSize="20"
+                           FontWeight="DemiBold">From:</TextBlock>
+                <DatePicker Style="{StaticResource MaterialDesignDatePicker}" 
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="{Binding ElementName=GridDatePicker, Path=ActualWidth, Converter={StaticResource Convert}}"
+                            Grid.Column="1"
+                            Height="auto"
+                            SelectedDate="{Binding Begin}"
+                            FontSize="20"
+                            FontWeight="SemiBold"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           FontStyle="Normal"
+                           FontSize="20"
+                           FontWeight="DemiBold">To:</TextBlock>
+                <DatePicker Style="{StaticResource MaterialDesignDatePicker}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Grid.Column="1"
+                            Width="{Binding ElementName=GridDatePicker, Path=ActualWidth, Converter={StaticResource Convert}}"
+                            Height="auto"
+                            SelectedDate="{Binding End}"
+                            FontSize="20"
+                            FontWeight="SemiBold" />
+            </Grid>
+        </Grid>
+        <DataGrid RowStyle="{DynamicResource DataGridRowStyle1}"
+                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                  CellStyle="{DynamicResource DataGridCellStyle1}"
+                  x:Name="membersDataGrid"
+                  Style="{DynamicResource DataGridStyle1}"
+                  Grid.ColumnSpan="2"
+                  Margin="0,10,0,10"
+                  Grid.RowSpan="2"
+                  ItemsSource="{Binding HistoryList}"
+                  Grid.Row="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="#"
+                                    IsReadOnly="True"
+                                    CanUserResize="False"
+                                    Width="auto"
+                                    Binding="{Binding Order}" />
+                <DataGridTemplateColumn Header="Bàn"
+                                        IsReadOnly="True"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TableName}"
+                                        VerticalAlignment="Center" />
+                          
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Thời gian"
+                                    Binding="{Binding Time}"
+                                    IsReadOnly="True"
+                                    Width="*" />
+                <DataGridTemplateColumn Header="Tổng tiền"
+                                        IsReadOnly="True"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Price, StringFormat=N0}"
+                                           />
+                                <TextBlock Text="VNĐ" />
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

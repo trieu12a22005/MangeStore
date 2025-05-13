@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="QuanLyQuanAn.View.DialogHost.ListBillInfShow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:QuanLyQuanAn.View.DialogHost"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:QuanLyQuanAn.ViewModel.MenuVM"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <vm:ByteToImageConverter x:Key="ByteToImageConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid Margin="10 15 10 15"
+              Width="500"
+              Height="400"
+              >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="{Binding}"
+                               MaxHeight="500" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       FontSize="15"
+                       FontWeight="Bold">Hóa đơn</TextBlock>
+            <DataGrid RowStyle="{DynamicResource DataGridRowStyle1}"
+                      ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}"
+                      CellStyle="{DynamicResource DataGridCellStyle1}"
+                      x:Name="membersDataGrid"
+                      ItemsSource="{Binding BillInfList}"
+                      Style="{DynamicResource DataGridStyle1}"
+                      Grid.Row="1">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="#"
+                                        CanUserResize="False"
+                                        Width="40"
+                                        Binding="{Binding No}" />
+                    <DataGridTemplateColumn Header="Tên món ăn"
+                                            Width="3*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Width="25"
+                                            Height="25"
+                                            CornerRadius="50"
+                                            Margin="0 0 10 0">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{Binding FoodImage, Converter={StaticResource ByteToImageConverter}}" />
+                                        </Border.Background>
+                                    </Border>
+
+                                    <TextBlock Text="{Binding Name}"
+                                               VerticalAlignment="Center" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Đơn giá"
+                                            Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Stretch"
+                                            Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Price, StringFormat=N0}"
+                                               Width="45" />
+                                    <TextBlock> VNĐ</TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Số lượng"
+                                            Width="2*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock VerticalAlignment="Top"
+                                         materialDesign:HintAssist.Hint="Text (validated)"
+                                         Text="{Binding Count}"
+                                         HorizontalAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <TextBlock FontSize="14"
+                           FontWeight="Bold">Tổng tiền:</TextBlock>
+                <TextBlock FontSize="14"
+                           FontWeight="Bold"
+                           Text="{Binding TotalPrice, StringFormat=N0}"
+                           Margin="5 0 5 0" />
+                <TextBlock FontSize="14"
+                           FontWeight="Bold"
+                           Margin="0 0 5 0">VNĐ</TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Margin="0 10 5 0"
+                        Background="Red"
+                        Command="{Binding CloseShowBillTable}">Thoát
+                </Button>
+                <Button Margin="5 10 5 0"
+                        Command="{Binding PayBill}"
+                        Content="{Binding TypeShow}">
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

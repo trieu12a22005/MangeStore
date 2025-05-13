@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="QuanLyQuanAn.View.DialogHost.AddFood"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QuanLyQuanAn.View.DialogHost"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:vm="clr-namespace:QuanLyQuanAn.ViewModel.MenuVM"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+    <UserControl.Resources>
+        <vm:ByteToImageConverter x:Key="ByteToImageConverter" />
+        <vm:IntToString x:Key="PriceToString" />
+        <vm:CategoryToId x:Key="CategoryToId" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Left"
+                   VerticalAlignment="Center" FontSize="15" Margin="10">Tên món ăn:</TextBlock>
+        <TextBox materialDesign:HintAssist.Hint="Nhập tên món ăn"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 Grid.Column="1"
+                 Grid.Row="0" HorizontalAlignment="Left"
+                 Text="{Binding FoodReadyToAdd.Name, UpdateSourceTrigger=PropertyChanged}"
+                 VerticalAlignment="Center" Height="50" Width="250"
+                 FontSize="12" Margin="10 10 10 10"/>
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontSize="15" Margin="10 10 10 10">Thêm hình ảnh:</TextBlock>
+        <Border Width="200"
+                Height="200"
+                Grid.Column="1"
+                Grid.Row="1"
+                Margin="0 0 10 0">
+            <Border.Background>
+                <ImageBrush ImageSource="{Binding FoodReadyToAdd.FoodImage, Converter={StaticResource ByteToImageConverter}}" />
+            </Border.Background>
+        </Border>
+        
+        <Button Grid.Row="1"
+                Grid.Column="1"
+                Width="25"
+                Height="25"
+                Command="{Binding OpenImageCm}"
+                HorizontalAlignment="Left"
+                >
+            <materialDesign:PackIcon Kind="Plus" Foreground="White" Margin="-10 -7 -7 -10"/>
+        </Button>
+        <TextBlock Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontSize="15" Margin="10 10 10 10">Thể loại:</TextBlock>
+        <ComboBox materialDesign:HintAssist.Hint="Danh mục"
+                  Grid.Row="2"
+                  Grid.Column="1"
+                  Width="250"
+                  Margin="-15 0 0 0"
+                  SelectedItem="{Binding FoodReadyToAdd.IdCategory, Converter={StaticResource CategoryToId}, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding CatagoryList}"
+                  Text="{Binding FoodReadyToAdd.Category}"
+                  DisplayMemberPath="name">
+        </ComboBox>
+        <TextBlock Grid.Row="3"
+                   Grid.Column="0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontSize="15" Margin="10">Giá:</TextBlock>
+        <Grid    
+            Grid.Row="3"
+            Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <TextBox
+                VerticalAlignment="Center"
+                materialDesign:HintAssist.Hint="Nhập giá tiền"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                Margin="0 -20 0 0"
+                Height="50"
+                Text="{Binding FoodReadyToAdd.Price, Converter={StaticResource PriceToString}, UpdateSourceTrigger=PropertyChanged, StringFormat=N0}"
+                Width="200"/>
+            <TextBlock VerticalAlignment="Center" Margin="10 20 0 10" Grid.Column="1">VNĐ</TextBlock>
+        </Grid>
+        <Button FontSize="14"
+                Width="300"
+                Grid.Row="4"
+                Margin="10"
+                Content="{Binding TypeAdd}"
+                Grid.ColumnSpan="2"
+                Command="{Binding AddFood}"></Button>
+        <Button FontSize="14"
+                Width="300"
+                Grid.Row="5"
+                Margin="10"
+                Background="Red"
+                Grid.ColumnSpan="2"
+                Command="{Binding CloseAddFood}">Thoát</Button>
+    </Grid>
+</UserControl>
