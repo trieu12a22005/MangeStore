@@ -101,14 +101,98 @@ namespace frontend.View
                 textConfirmPassword.Visibility = Visibility.Visible;
             }
         }
-        private void btnSignIn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void btnSignUp_Click(object sender, RoutedEventArgs e)
         {
 
+        }        
+        private void txtBirth_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                if (textBox.Text == "DD/MM/YYYY")
+                {
+                    textBox.Text = "";
+                }
+                textBirth.Visibility = Visibility.Collapsed; // Ẩn placeholder khi focus
+            }
+        }
+
+        private void txtBirth_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                if (string.IsNullOrWhiteSpace(textBox.Text))
+                {
+                    textBox.Text = "DD/MM/YYYY";
+                    textBirth.Visibility = Visibility.Visible; // Hiện placeholder khi trống
+                }
+            }
+        }
+
+        private void txtBirth_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (sender is TextBox textBox) // Ensure sender is a TextBox
+            {
+                string currentText = textBox.Text;
+
+                // Only allow numeric input
+                if (!char.IsDigit(e.Text, 0))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Limit maximum length (8 digits for DDMMYYYY)
+                int digitCount = currentText.Count(char.IsDigit);
+                if (digitCount >= 8)
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+        private bool isUpdatingText = false;
+        private void txtBirth_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is not TextBox textBox || isUpdatingText) return;
+
+            try
+            {
+                isUpdatingText = true;
+
+                string text = textBox.Text;
+                int caretIndex = textBox.CaretIndex;
+
+                // Extract digits
+                string digits = new string(text.Where(char.IsDigit).ToArray());
+
+                // Format as DD/MM/YYYY
+                string formatted = "";
+                for (int i = 0; i < digits.Length && i < 8; i++)
+                {
+                    if (i == 2 || i == 4)
+                        formatted += "/";
+                    formatted += digits[i];
+                }
+
+                // Update text
+                textBox.Text = formatted;
+                textBirth.Visibility = string.IsNullOrEmpty(formatted) ? Visibility.Visible : Visibility.Collapsed;
+
+                // Calculate caret position
+                int newCaretIndex = caretIndex;
+                if (caretIndex == 3 || caretIndex == 6) // After adding '/'
+                    newCaretIndex++;
+                textBox.CaretIndex = Math.Min(newCaretIndex, formatted.Length);
+            }
+            finally
+            {
+                isUpdatingText = false;
+            }
+        }
+
+        private void textBirth_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            txtBirth.Focus();
         }
     }
 }

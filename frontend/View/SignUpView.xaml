@@ -13,49 +13,6 @@
         AllowsTransparency="True"
         MouseDown="Window_MouseDown">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="1.5*" />
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="0" 
-            Background="#4CB3B8">
-            <StackPanel VerticalAlignment="Center"
-                HorizontalAlignment="Center">
-                <TextBlock Text="Already have an account?"
-                        Foreground="#FFFFFF"
-                        FontSize="30"
-                        FontWeight="Bold"
-                        FontFamily="Monsterrat"
-                        HorizontalAlignment="Center"
-                        TextWrapping="Wrap"
-                        TextAlignment="Center"
-                        Margin="0,5,0,0"/>
-                <Button x:Name="btnSign"
-                        Content="Sign In"
-                        FontSize="14"
-                        FontWeight="Bold"
-                        FontFamily="Monsterrat"
-                        Foreground="#4CB3B8"
-                        Background="#FFFFFF"
-                        BorderThickness="0"
-                        Margin="0, 35, 0, 0"
-                        Cursor="Hand"
-                        Click="btnSignIn_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Width="150" Height="40"
-                                    CornerRadius="20"
-                                    Background="{TemplateBinding Background}">
-                                <ContentPresenter VerticalAlignment="Center"
-                                                  HorizontalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </StackPanel>
-        </Grid>
-
         <StackPanel Grid.Column="1" Background="#FFFFFF">
             <Grid>
                 <Grid.RowDefinitions>
@@ -133,7 +90,7 @@
 
                 <StackPanel Grid.Row="1"
                             Width="400"
-                            Margin="0,35,0,0">
+                            Margin="0,0,0,0">
                     <TextBlock Text="Sign in to App"
                             Foreground="#4CB3B8"
                             FontSize="50"
@@ -146,7 +103,7 @@
                                 BorderThickness="1"
                                 BorderBrush="#acb0af"                                
                                 CornerRadius="5"
-                                Margin="0, 35, 0, 0"
+                                Margin="0, 15, 0, 0"
                                 HorizontalAlignment="Center">
                             <Grid Margin="10">
                                 <Grid.ColumnDefinitions>
@@ -186,6 +143,35 @@
                                            Style="{StaticResource textHint}"/>
                                 <TextBox x:Name="txtEmail"
                                          TextChanged="txtEmail_TextChanged"
+                                         FocusVisualStyle="{x:Null}"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         Style="{StaticResource textBox}"/>
+                            </Grid>
+                        </Border>
+                        <Border Width="300"                                
+                                BorderThickness="1"
+                                BorderBrush="#acb0af"                                
+                                CornerRadius="5"
+                                Margin="0, 15, 0, 0"
+                                HorizontalAlignment="Center">
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image Source="/Images/calendar-2-line.png" Height="20"/>
+                                <TextBlock x:Name="textBirth"                                                                                    
+                                           MouseDown="textBirth_MouseDown"
+                                           Text="DD/MM/YYYY"
+                                           Style="{StaticResource textHint}"/>
+                                <TextBox x:Name="txtBirth"
+                                         Text="DD/MM/YYYY"
+                                         GotFocus="txtBirth_GotFocus"
+                                         LostFocus="txtBirth_LostFocus"
+                                         PreviewTextInput="txtBirth_PreviewTextInput"
+                                         TextChanged="txtBirth_TextChanged"
                                          FocusVisualStyle="{x:Null}"
                                          BorderThickness="0"
                                          Background="Transparent"
