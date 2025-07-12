@@ -1,0 +1,664 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="QuanLyQuanAnModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="idRes" />
+            <PropertyRef Name="idAccout" />
+          </Key>
+          <Property Name="idRes" Type="int" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="TypeAccount" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="idAccout" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="idBill" />
+          </Key>
+          <Property Name="idBill" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idTable" Type="int" Nullable="false" />
+          <Property Name="TimeIn" Type="datetime" Nullable="false" />
+          <Property Name="TimeOut" Type="datetime" />
+          <Property Name="discount" Type="int" />
+          <Property Name="TotalPrice" Type="int" Nullable="false" />
+          <Property Name="status" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="completion" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="BillInf">
+          <Key>
+            <PropertyRef Name="idBillInf" />
+          </Key>
+          <Property Name="idBillInf" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idFood" Type="int" Nullable="false" />
+          <Property Name="count" Type="int" Nullable="false" />
+          <Property Name="idBill" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CurrentSession">
+          <Key>
+            <PropertyRef Name="MachineId" />
+          </Key>
+          <Property Name="LoginTime" Type="datetime" />
+          <Property Name="LogoutTime" Type="datetime" />
+          <Property Name="MachineId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="idAccount" Type="int" />
+        </EntityType>
+        <EntityType Name="food">
+          <Key>
+            <PropertyRef Name="idFood" />
+          </Key>
+          <Property Name="idFood" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idFoodCtg" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="price" Type="int" Nullable="false" />
+          <Property Name="FoodImage" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="foodCategory">
+          <Key>
+            <PropertyRef Name="idFoodCtg" />
+          </Key>
+          <Property Name="idRes" Type="int" Nullable="false" />
+          <Property Name="idFoodCtg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Restaurant">
+          <Key>
+            <PropertyRef Name="idRes" />
+          </Key>
+          <Property Name="idRes" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RestaurantName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tableFood">
+          <Key>
+            <PropertyRef Name="idTable" />
+          </Key>
+          <Property Name="idTable" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idRes" Type="int" Nullable="false" />
+          <Property Name="tableName" Type="nvarchar" MaxLength="20" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <Association Name="AtoR">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="idRes" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="idRes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BItoB">
+          <End Role="Bill" Type="Self.Bill" Multiplicity="1" />
+          <End Role="BillInf" Type="Self.BillInf" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bill">
+              <PropertyRef Name="idBill" />
+            </Principal>
+            <Dependent Role="BillInf">
+              <PropertyRef Name="idBill" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BItoF">
+          <End Role="food" Type="Self.food" Multiplicity="1" />
+          <End Role="BillInf" Type="Self.BillInf" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="food">
+              <PropertyRef Name="idFood" />
+            </Principal>
+            <Dependent Role="BillInf">
+              <PropertyRef Name="idFood" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BtoT">
+          <End Role="tableFood" Type="Self.tableFood" Multiplicity="1" />
+          <End Role="Bill" Type="Self.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tableFood">
+              <PropertyRef Name="idTable" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="idTable" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FCtoR">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
+          <End Role="foodCategory" Type="Self.foodCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="idRes" />
+            </Principal>
+            <Dependent Role="foodCategory">
+              <PropertyRef Name="idRes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FtoCtg">
+          <End Role="foodCategory" Type="Self.foodCategory" Multiplicity="1" />
+          <End Role="food" Type="Self.food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="foodCategory">
+              <PropertyRef Name="idFoodCtg" />
+            </Principal>
+            <Dependent Role="food">
+              <PropertyRef Name="idFoodCtg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TtoR">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
+          <End Role="tableFood" Type="Self.tableFood" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="idRes" />
+            </Principal>
+            <Dependent Role="tableFood">
+              <PropertyRef Name="idRes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="QuanLyQuanAnModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bill" EntityType="Self.Bill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BillInf" EntityType="Self.BillInf" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentSession" EntityType="Self.CurrentSession" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="food" EntityType="Self.food" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="foodCategory" EntityType="Self.foodCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Restaurant" EntityType="Self.Restaurant" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tableFood" EntityType="Self.tableFood" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="AtoR" Association="Self.AtoR">
+            <End Role="Restaurant" EntitySet="Restaurant" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="BItoB" Association="Self.BItoB">
+            <End Role="Bill" EntitySet="Bill" />
+            <End Role="BillInf" EntitySet="BillInf" />
+          </AssociationSet>
+          <AssociationSet Name="BItoF" Association="Self.BItoF">
+            <End Role="food" EntitySet="food" />
+            <End Role="BillInf" EntitySet="BillInf" />
+          </AssociationSet>
+          <AssociationSet Name="BtoT" Association="Self.BtoT">
+            <End Role="tableFood" EntitySet="tableFood" />
+            <End Role="Bill" EntitySet="Bill" />
+          </AssociationSet>
+          <AssociationSet Name="FCtoR" Association="Self.FCtoR">
+            <End Role="Restaurant" EntitySet="Restaurant" />
+            <End Role="foodCategory" EntitySet="foodCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FtoCtg" Association="Self.FtoCtg">
+            <End Role="foodCategory" EntitySet="foodCategory" />
+            <End Role="food" EntitySet="food" />
+          </AssociationSet>
+          <AssociationSet Name="TtoR" Association="Self.TtoR">
+            <End Role="Restaurant" EntitySet="Restaurant" />
+            <End Role="tableFood" EntitySet="tableFood" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="QuanLyQuanAnModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="idRes" />
+            <PropertyRef Name="idAccout" />
+          </Key>
+          <Property Name="idRes" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TypeAccount" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="idAccout" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Restaurant" Relationship="Self.AtoR" FromRole="Account" ToRole="Restaurant" />
+        </EntityType>
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="idBill" />
+          </Key>
+          <Property Name="idBill" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idTable" Type="Int32" Nullable="false" />
+          <Property Name="TimeIn" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TimeOut" Type="DateTime" Precision="3" />
+          <Property Name="discount" Type="Int32" />
+          <Property Name="TotalPrice" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="completion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="BillInfs" Relationship="Self.BItoB" FromRole="Bill" ToRole="BillInf" />
+          <NavigationProperty Name="tableFood" Relationship="Self.BtoT" FromRole="Bill" ToRole="tableFood" />
+        </EntityType>
+        <EntityType Name="BillInf">
+          <Key>
+            <PropertyRef Name="idBillInf" />
+          </Key>
+          <Property Name="idBillInf" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idFood" Type="Int32" Nullable="false" />
+          <Property Name="count" Type="Int32" Nullable="false" />
+          <Property Name="idBill" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Bill" Relationship="Self.BItoB" FromRole="BillInf" ToRole="Bill" />
+          <NavigationProperty Name="food" Relationship="Self.BItoF" FromRole="BillInf" ToRole="food" />
+        </EntityType>
+        <EntityType Name="CurrentSession">
+          <Key>
+            <PropertyRef Name="MachineId" />
+          </Key>
+          <Property Name="LoginTime" Type="DateTime" Precision="3" />
+          <Property Name="LogoutTime" Type="DateTime" Precision="3" />
+          <Property Name="MachineId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="idAccount" Type="Int32" />
+        </EntityType>
+        <EntityType Name="food">
+          <Key>
+            <PropertyRef Name="idFood" />
+          </Key>
+          <Property Name="idFood" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idFoodCtg" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="price" Type="Int32" Nullable="false" />
+          <Property Name="FoodImage" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="BillInfs" Relationship="Self.BItoF" FromRole="food" ToRole="BillInf" />
+          <NavigationProperty Name="foodCategory" Relationship="Self.FtoCtg" FromRole="food" ToRole="foodCategory" />
+        </EntityType>
+        <EntityType Name="foodCategory">
+          <Key>
+            <PropertyRef Name="idFoodCtg" />
+          </Key>
+          <Property Name="idRes" Type="Int32" Nullable="false" />
+          <Property Name="idFoodCtg" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="foods" Relationship="Self.FtoCtg" FromRole="foodCategory" ToRole="food" />
+          <NavigationProperty Name="Restaurant" Relationship="Self.FCtoR" FromRole="foodCategory" ToRole="Restaurant" />
+        </EntityType>
+        <EntityType Name="Restaurant">
+          <Key>
+            <PropertyRef Name="idRes" />
+          </Key>
+          <Property Name="idRes" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RestaurantName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Accounts" Relationship="Self.AtoR" FromRole="Restaurant" ToRole="Account" />
+          <NavigationProperty Name="foodCategories" Relationship="Self.FCtoR" FromRole="Restaurant" ToRole="foodCategory" />
+          <NavigationProperty Name="tableFoods" Relationship="Self.TtoR" FromRole="Restaurant" ToRole="tableFood" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tableFood">
+          <Key>
+            <PropertyRef Name="idTable" />
+          </Key>
+          <Property Name="idTable" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idRes" Type="Int32" Nullable="false" />
+          <Property Name="tableName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Bills" Relationship="Self.BtoT" FromRole="tableFood" ToRole="Bill" />
+          <NavigationProperty Name="Restaurant" Relationship="Self.TtoR" FromRole="tableFood" ToRole="Restaurant" />
+        </EntityType>
+        <Association Name="AtoR">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="idRes" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="idRes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BItoB">
+          <End Role="Bill" Type="Self.Bill" Multiplicity="1" />
+          <End Role="BillInf" Type="Self.BillInf" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bill">
+              <PropertyRef Name="idBill" />
+            </Principal>
+            <Dependent Role="BillInf">
+              <PropertyRef Name="idBill" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BtoT">
+          <End Role="tableFood" Type="Self.tableFood" Multiplicity="1" />
+          <End Role="Bill" Type="Self.Bill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tableFood">
+              <PropertyRef Name="idTable" />
+            </Principal>
+            <Dependent Role="Bill">
+              <PropertyRef Name="idTable" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="BItoF">
+          <End Role="food" Type="Self.food" Multiplicity="1" />
+          <End Role="BillInf" Type="Self.BillInf" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="food">
+              <PropertyRef Name="idFood" />
+            </Principal>
+            <Dependent Role="BillInf">
+              <PropertyRef Name="idFood" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FtoCtg">
+          <End Role="foodCategory" Type="Self.foodCategory" Multiplicity="1" />
+          <End Role="food" Type="Self.food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="foodCategory">
+              <PropertyRef Name="idFoodCtg" />
+            </Principal>
+            <Dependent Role="food">
+              <PropertyRef Name="idFoodCtg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FCtoR">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
+          <End Role="foodCategory" Type="Self.foodCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="idRes" />
+            </Principal>
+            <Dependent Role="foodCategory">
+              <PropertyRef Name="idRes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TtoR">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1" />
+          <End Role="tableFood" Type="Self.tableFood" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="idRes" />
+            </Principal>
+            <Dependent Role="tableFood">
+              <PropertyRef Name="idRes" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="QuanLyQuanAnEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="Bills" EntityType="Self.Bill" />
+          <EntitySet Name="BillInfs" EntityType="Self.BillInf" />
+          <EntitySet Name="CurrentSessions" EntityType="Self.CurrentSession" />
+          <EntitySet Name="foods" EntityType="Self.food" />
+          <EntitySet Name="foodCategories" EntityType="Self.foodCategory" />
+          <EntitySet Name="Restaurants" EntityType="Self.Restaurant" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="tableFoods" EntityType="Self.tableFood" />
+          <AssociationSet Name="AtoR" Association="Self.AtoR">
+            <End Role="Restaurant" EntitySet="Restaurants" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="BItoB" Association="Self.BItoB">
+            <End Role="Bill" EntitySet="Bills" />
+            <End Role="BillInf" EntitySet="BillInfs" />
+          </AssociationSet>
+          <AssociationSet Name="BtoT" Association="Self.BtoT">
+            <End Role="tableFood" EntitySet="tableFoods" />
+            <End Role="Bill" EntitySet="Bills" />
+          </AssociationSet>
+          <AssociationSet Name="BItoF" Association="Self.BItoF">
+            <End Role="food" EntitySet="foods" />
+            <End Role="BillInf" EntitySet="BillInfs" />
+          </AssociationSet>
+          <AssociationSet Name="FtoCtg" Association="Self.FtoCtg">
+            <End Role="foodCategory" EntitySet="foodCategories" />
+            <End Role="food" EntitySet="foods" />
+          </AssociationSet>
+          <AssociationSet Name="FCtoR" Association="Self.FCtoR">
+            <End Role="Restaurant" EntitySet="Restaurants" />
+            <End Role="foodCategory" EntitySet="foodCategories" />
+          </AssociationSet>
+          <AssociationSet Name="TtoR" Association="Self.TtoR">
+            <End Role="Restaurant" EntitySet="Restaurants" />
+            <End Role="tableFood" EntitySet="tableFoods" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(QuanLyQuanAnModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(QuanLyQuanAnModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="QuanLyQuanAnModelStoreContainer" CdmEntityContainer="QuanLyQuanAnEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="idRes" ColumnName="idRes" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="TypeAccount" ColumnName="TypeAccount" />
+                <ScalarProperty Name="idAccout" ColumnName="idAccout" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bills">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.Bill">
+              <MappingFragment StoreEntitySet="Bill">
+                <ScalarProperty Name="idBill" ColumnName="idBill" />
+                <ScalarProperty Name="idTable" ColumnName="idTable" />
+                <ScalarProperty Name="TimeIn" ColumnName="TimeIn" />
+                <ScalarProperty Name="TimeOut" ColumnName="TimeOut" />
+                <ScalarProperty Name="discount" ColumnName="discount" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="completion" ColumnName="completion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BillInfs">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.BillInf">
+              <MappingFragment StoreEntitySet="BillInf">
+                <ScalarProperty Name="idBillInf" ColumnName="idBillInf" />
+                <ScalarProperty Name="idFood" ColumnName="idFood" />
+                <ScalarProperty Name="count" ColumnName="count" />
+                <ScalarProperty Name="idBill" ColumnName="idBill" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentSessions">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.CurrentSession">
+              <MappingFragment StoreEntitySet="CurrentSession">
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+                <ScalarProperty Name="LogoutTime" ColumnName="LogoutTime" />
+                <ScalarProperty Name="MachineId" ColumnName="MachineId" />
+                <ScalarProperty Name="idAccount" ColumnName="idAccount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="foods">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.food">
+              <MappingFragment StoreEntitySet="food">
+                <ScalarProperty Name="idFood" ColumnName="idFood" />
+                <ScalarProperty Name="idFoodCtg" ColumnName="idFoodCtg" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="FoodImage" ColumnName="FoodImage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="foodCategories">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.foodCategory">
+              <MappingFragment StoreEntitySet="foodCategory">
+                <ScalarProperty Name="idRes" ColumnName="idRes" />
+                <ScalarProperty Name="idFoodCtg" ColumnName="idFoodCtg" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Restaurants">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.Restaurant">
+              <MappingFragment StoreEntitySet="Restaurant">
+                <ScalarProperty Name="idRes" ColumnName="idRes" />
+                <ScalarProperty Name="RestaurantName" ColumnName="RestaurantName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tableFoods">
+            <EntityTypeMapping TypeName="QuanLyQuanAnModel.tableFood">
+              <MappingFragment StoreEntitySet="tableFood">
+                <ScalarProperty Name="idTable" ColumnName="idTable" />
+                <ScalarProperty Name="idRes" ColumnName="idRes" />
+                <ScalarProperty Name="tableName" ColumnName="tableName" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="QuanLyQuanAnModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="QuanLyQuanAnModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="QuanLyQuanAnModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="QuanLyQuanAnModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLyQuanAnModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="QuanLyQuanAnModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QuanLyQuanAnModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="QuanLyQuanAnModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="QuanLyQuanAnModel.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

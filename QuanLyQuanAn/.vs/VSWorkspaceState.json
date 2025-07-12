@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\obj",
+    "\\Properties",
+    "\\Resources",
+    "\\View",
+    "\\ViewModel",
+    "\\View\\DialogHost",
+    "\\View\\HumanResouce",
+    "\\View\\StaffView",
+    "\\View\\Statistics"
+  ],
+  "SelectedNode": "\\App.config",
+  "PreviewInSolutionExplorer": false
+}

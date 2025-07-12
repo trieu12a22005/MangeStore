@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="QuanLyQuanAn.View.Statistics.FoodStatistics"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:QuanLyQuanAn.View.Statistics"
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:QuanLyQuanAn.ViewModel.StatisticVM"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+    <UserControl.DataContext>
+        <vm:FoodStatisticsVM />
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <vm:WidthOfDatePickerAcrossGrid x:Key="Convert" />
+        <vm:VisibleToHidden x:Key="VisibleToHidden" />
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation
+                        Storyboard.TargetProperty="Opacity"
+                        From="0.0"
+                        To="1.0"
+                        Duration="0:0:0.5" />
+                </Storyboard>
+            </BeginStoryboard>
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation
+                        Storyboard.TargetName="UserControlTranslateTransform"
+                        Storyboard.TargetProperty="Y"
+                        From="30"
+                        To="0"
+                        Duration="0:0:0.5" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <UserControl.RenderTransform>
+        <TranslateTransform x:Name="UserControlTranslateTransform" X="0" Y="30" />
+    </UserControl.RenderTransform>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1"
+              Visibility="{Binding Showdate}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0"
+                  x:Name="GridDatePicker">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="20"
+                           FontStyle="Normal"
+                           FontWeight="DemiBold">
+                    From:
+                </TextBlock>
+                <DatePicker Grid.Column="1"
+                            Height="auto"
+                            Width="{Binding ElementName=GridDatePicker, Path=ActualWidth, Converter={StaticResource Convert}}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            x:Name="Begin"
+                            SelectedDate="{Binding Begin}"
+                            FontWeight="SemiBold"
+                            Style="{StaticResource MaterialDesignDatePicker}" />
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="20"
+                           FontStyle="Normal"
+                           FontWeight="DemiBold">
+                    To:
+                </TextBlock>
+                <DatePicker Grid.Column="1"
+                            Width="{Binding ElementName=GridDatePicker, Path=ActualWidth, Converter={StaticResource Convert}}"
+                            Height="auto"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            x:Name="End"
+                            SelectedDate="{Binding End}"
+                            FontWeight="SemiBold"
+                            Style="{StaticResource MaterialDesignDatePicker}" />
+            </Grid>
+        </Grid>
+        <StackPanel
+                Grid.Row="0"
+                Margin="0,0,20,0"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <TextBlock
+                    Margin="0,5,0,0"
+                    HorizontalAlignment="Center"
+                    FontSize="15">
+                    Thống kê theo:
+                </TextBlock>
+                <ComboBox
+                    Name="TimePeriodComboBox"
+                    Width="150"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    FontSize="15"
+                    SelectedIndex="0"
+                    Text="{Binding TypeRevenua}"
+                    Style="{StaticResource MaterialDesignComboBox}">
+                    <ComboBoxItem Content="Hôm nay" />
+                    <ComboBoxItem Content="7 ngày gần đây" />
+                    <ComboBoxItem Content="Tháng này" />
+                    <ComboBoxItem Content="Năm nay" />
+                    <ComboBoxItem Content="Chọn khoảng thời gian" />
+                </ComboBox>
+        </StackPanel>
+        <TextBlock FontSize="25"
+                   FontWeight="Bold"
+                   Grid.Row="2"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Visibility="{Binding ElementName=foodPieChart, Path=Visibility, Converter={StaticResource VisibleToHidden}}">Không có dữ liệu!</TextBlock>
+        <lvc:PieChart Name="foodPieChart"
+                      Grid.Row="2"
+                      Margin="10"
+                      Visibility="{Binding ShowChart}"
+                      Series="{Binding SeriesStatistic}">
+        </lvc:PieChart>
+    </Grid>
+</UserControl>
