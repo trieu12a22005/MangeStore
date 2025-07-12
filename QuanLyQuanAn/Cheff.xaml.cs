@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace QuanLyQuanAn
 {
-    /// <summary>
-    /// Interaction logic for Cheff.xaml
-    /// </summary>
     public partial class Cheff : Window
     {
         public Cheff()
