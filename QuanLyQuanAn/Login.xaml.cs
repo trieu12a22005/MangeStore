@@ -15,9 +15,6 @@ using System.Windows.Shapes;
 
 namespace QuanLyQuanAn
 {
-    /// <summary>
-    /// Interaction logic for Login.xaml
-    /// </summary>
     public partial class Login : Window
     {
         public Login()
